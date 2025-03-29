@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projetos - Portcaco</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.3.0/parse.min.js"></script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+
+    .navbar {
+      background-color: #343a40;
+    }
+
+    .navbar-brand {
+      color: #ffffff;
+    }
+
+    .navbar-nav .nav-link {
+      color: #ffffff;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #007bff;
+    }
+
+    .project-card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .project-card-body {
+      padding: 20px;
+      background-color: #fff;
+    }
+
+    .project-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .project-description {
+      font-size: 1rem;
+      color: #777;
+      margin-bottom: 20px;
+    }
+
+    .btn-custom {
+      background-color: #007bff;
+      color: white;
+      border-radius: 25px;
+      padding: 12px 30px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+
+    .btn-custom:hover {
+      background-color: #0056b3;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #28a745;
+      color: white;
+      border-radius: 50%;
+      padding: 15px;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .floating-btn:hover {
+      transform: scale(1.1);
+      background-color: #218838;
+    }
+
+    .modal-header {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .modal-body {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Portcaco</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Projetos</a></li>
+        <li class="nav-item"><a class="nav-link" href="perfil.html">Perfil</a></li>
+        <li class="nav-item"><a class="nav-link" href="logout.html">Sair</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <div class="container mt-5">
+    <h1 class="text-center mb-5">Meus Projetos</h1>
+    <div class="row" id="projects-container"></div>
+    <a href="#" class="floating-btn" data-toggle="modal" data-target="#createProjectModal"><i class="fas fa-plus"></i></a>
+  </div>
+
+  <!-- Modal para Criar Projeto -->
+  <div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createProjectModalLabel">Criar Novo Projeto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="createProjectForm">
+            <div class="form-group">
+              <label for="projectTitle">Título do Projeto</label>
+              <input type="text" class="form-control" id="projectTitle" required>
+            </div>
+            <div class="form-group">
+              <label for="projectDescription">Descrição</label>
+              <textarea class="form-control" id="projectDescription" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="projectImageUrl">URL da Imagem do Projeto</label>
+              <input type="text" class="form-control" id="projectImageUrl" placeholder="Insira a URL da imagem">
+            </div>
+            <button type="submit" class="btn btn-primary">Criar Projeto</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Editar Projeto -->
+  <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editProjectModalLabel">Editar Projeto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editProjectForm">
+            <input type="hidden" id="editProjectId">
+            <div class="form-group">
+              <label for="editProjectTitle">Título do Projeto</label>
+              <input type="text" class="form-control" id="editProjectTitle" required>
+            </div>
+            <div class="form-group">
+              <label for="editProjectDescription">Descrição</label>
+              <textarea class="form-control" id="editProjectDescription" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="editProjectImageUrl">URL da Imagem do Projeto</label>
+              <input type="text" class="form-control" id="editProjectImageUrl" placeholder="Insira a URL da imagem">
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Carregamento do Parse e Backend -->
+  <script src="js/projeto-backend.js"></script>  <!-- Carregue o script backend -->
+
+  <script>
+    // Função para criar projeto
+    document.getElementById('createProjectForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const title = document.getElementById('projectTitle').value;
+      const description = document.getElementById('projectDescription').value;
+      const imageUrl = document.getElementById('projectImageUrl').value || "https://via.placeholder.com/350x200";  // URL da imagem (ou uma imagem padrão se não informada)
+
+      // Chama a função de backend para criar o projeto
+      const project = await createProjectInBackend(title, description, imageUrl);  // Agora passando a URL da imagem
+
+      if (project) {
+        renderProjects();  // Atualiza a lista de projetos
+        $('#createProjectModal').modal('hide');  // Fecha o modal
+      } else {
+        alert('Erro ao criar o projeto.');
+      }
+    });
+
+    // Função para renderizar os projetos na interface
+    async function renderProjects() {
+      const container = document.getElementById('projects-container');
+      container.innerHTML = '';  // Limpa os projetos antes de renderizar novamente
+
+      const projects = await getProjects();  // Obtém os projetos do backend
+
+      projects.forEach(project => {
+        const imageUrl = project.get('imageUrl') || "https://via.placeholder.com/350x200";  // Imagem padrão caso não tenha URL definida
+
+        const projectCard = document.createElement('div');
+        projectCard.classList.add('col-md-4', 'mb-4');
+        projectCard.innerHTML = `
+          <div class="card project-card">
+            <img src="${imageUrl}" alt="Imagem do Projeto" class="card-img-top">  <!-- Imagem do projeto -->
+            <div class="card-body project-card-body">
+              <h5 class="card-title project-title">${project.get('title')}</h5>
+              <p class="card-text project-description">${project.get('description')}</p>
+              <button class="btn btn-custom" onclick="editProject('${project.id}')">Editar</button>
+              <button class="btn btn-danger" onclick="deleteProject('${project.id}')">Excluir</button> <!-- Botão de exclusão -->
+            </div>
+          </div>
+        `;
+        container.appendChild(projectCard);
+      });
+    }
+
+    // Função para editar um projeto
+    async function editProject(id) {
+      const project = await getProjectById(id);
+      document.getElementById('editProjectTitle').value = project.get('title');
+      document.getElementById('editProjectDescription').value = project.get('description');
+      document.getElementById('editProjectImageUrl').value = project.get('imageUrl') || "https://via.placeholder.com/350x200";
+      document.getElementById('editProjectId').value = project.id;
+      $('#editProjectModal').modal('show');
+    }
+
+    // Evento de envio do formulário de edição
+    document.getElementById('editProjectForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const id = document.getElementById('editProjectId').value;
+      const title = document.getElementById('editProjectTitle').value;
+      const description = document.getElementById('editProjectDescription').value;
+      const imageUrl = document.getElementById('editProjectImageUrl').value || "https://via.placeholder.com/350x200";  // URL da imagem
+
+      // Atualiza o projeto no backend
+      await updateProjectInBackend(id, title, description, imageUrl);
+
+      renderProjects();  // Atualiza a lista de projetos
+      $('#editProjectModal').modal('hide');  // Fecha o modal
+    });
+
+    // Função para excluir um projeto
+    async function deleteProject(id) {
+      if (confirm('Tem certeza que deseja excluir este projeto?')) {
+        await deleteProjectFromBackend(id);  // Chama o backend para excluir o projeto
+        renderProjects();  // Atualiza a lista de projetos após a exclusão
+      }
+    }
+
+    // Função para excluir um projeto do backend
+    async function deleteProjectFromBackend(id) {
+      const Project = Parse.Object.extend("Project");
+      const query = new Parse.Query(Project);
+
+      try {
+        const project = await query.get(id);
+        await project.destroy();
+        console.log('Projeto excluído com sucesso!');
+      } catch (error) {
+        console.error('Erro ao excluir o projeto: ', error);
+      }
+    }
+
+    // Inicializa a lista de projetos ao carregar a página
+    window.onload = renderProjects;
+  </script>
+</body>
+</html>
