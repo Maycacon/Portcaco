@@ -123,14 +123,14 @@
     </div>
   </nav>
 
-  <!-- Conteúdo Principal -->
+  <!-- Principal -->
   <div class="container mt-5">
     <h1 class="text-center mb-5">Meus Projetos</h1>
     <div class="row" id="projects-container"></div>
     <a href="#" class="floating-btn" data-toggle="modal" data-target="#createProjectModal"><i class="fas fa-plus"></i></a>
   </div>
 
-  <!-- Modal para Criar Projeto -->
+  <!-- Criar Projeto -->
   <div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -161,7 +161,7 @@
     </div>
   </div>
 
-  <!-- Modal para Editar Projeto -->
+  <!-- Editar Projeto -->
   <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -193,43 +193,42 @@
     </div>
   </div>
 
-  <!-- Font Awesome -->
+  
   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <!-- Carregamento do Parse e Backend -->
-  <script src="js/projeto-backend.js"></script>  <!-- Carregue o script backend -->
+  
+  <script src="js/projeto-backend.js"></script> 
 
   <script>
-    // Função para criar projeto
+   
     document.getElementById('createProjectForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const title = document.getElementById('projectTitle').value;
       const description = document.getElementById('projectDescription').value;
-      const imageUrl = document.getElementById('projectImageUrl').value || "https://via.placeholder.com/350x200";  // URL da imagem (ou uma imagem padrão se não informada)
+      const imageUrl = document.getElementById('projectImageUrl').value || "https://www2.camara.leg.br/atividade-legislativa/comissoes/comissoes-permanentes/cindra/imagens/sem.jpg.gif/image_preview";  
 
-      // Chama a função de backend para criar o projeto
-      const project = await createProjectInBackend(title, description, imageUrl);  // Agora passando a URL da imagem
+      
+      const project = await createProjectInBackend(title, description, imageUrl); 
 
       if (project) {
-        renderProjects();  // Atualiza a lista de projetos
-        $('#createProjectModal').modal('hide');  // Fecha o modal
+        renderProjects();  
+        $('#createProjectModal').modal('hide');
       } else {
         alert('Erro ao criar o projeto.');
       }
     });
 
-    // Função para renderizar os projetos na interface
     async function renderProjects() {
       const container = document.getElementById('projects-container');
-      container.innerHTML = '';  // Limpa os projetos antes de renderizar novamente
+      container.innerHTML = ''; 
 
-      const projects = await getProjects();  // Obtém os projetos do backend
+      const projects = await getProjects(); 
 
       projects.forEach(project => {
-        const imageUrl = project.get('imageUrl') || "https://via.placeholder.com/350x200";  // Imagem padrão caso não tenha URL definida
+        const imageUrl = project.get('imageUrl') || "https://via.placeholder.com/350x200";  // 
 
         const projectCard = document.createElement('div');
         projectCard.classList.add('col-md-4', 'mb-4');
@@ -248,7 +247,7 @@
       });
     }
 
-    // Função para editar um projeto
+    // editar um projeto
     async function editProject(id) {
       const project = await getProjectById(id);
       document.getElementById('editProjectTitle').value = project.get('title');
@@ -258,30 +257,30 @@
       $('#editProjectModal').modal('show');
     }
 
-    // Evento de envio do formulário de edição
+    
     document.getElementById('editProjectForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const id = document.getElementById('editProjectId').value;
       const title = document.getElementById('editProjectTitle').value;
       const description = document.getElementById('editProjectDescription').value;
-      const imageUrl = document.getElementById('editProjectImageUrl').value || "https://via.placeholder.com/350x200";  // URL da imagem
+      const imageUrl = document.getElementById('editProjectImageUrl').value || "https://via.placeholder.com/350x200";  
 
-      // Atualiza o projeto no backend
+      
       await updateProjectInBackend(id, title, description, imageUrl);
 
-      renderProjects();  // Atualiza a lista de projetos
-      $('#editProjectModal').modal('hide');  // Fecha o modal
+      renderProjects(); 
+      $('#editProjectModal').modal('hide'); 
     });
 
-    // Função para excluir um projeto
+    
     async function deleteProject(id) {
       if (confirm('Tem certeza que deseja excluir este projeto?')) {
-        await deleteProjectFromBackend(id);  // Chama o backend para excluir o projeto
-        renderProjects();  // Atualiza a lista de projetos após a exclusão
+        await deleteProjectFromBackend(id); 
+        renderProjects(); 
       }
     }
 
-    // Função para excluir um projeto do backend
+   
     async function deleteProjectFromBackend(id) {
       const Project = Parse.Object.extend("Project");
       const query = new Parse.Query(Project);
@@ -295,7 +294,7 @@
       }
     }
 
-    // Inicializa a lista de projetos ao carregar a página
+   
     window.onload = renderProjects;
   </script>
 </body>
