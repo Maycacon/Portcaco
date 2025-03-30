@@ -208,7 +208,7 @@
       event.preventDefault();
       const title = document.getElementById('projectTitle').value;
       const description = document.getElementById('projectDescription').value;
-      const imageUrl = document.getElementById('projectImageUrl').value || "https://via.placeholder.com/350x200";  // URL da imagem (ou uma imagem padrão se não informada)
+      const imageUrl = document.getElementById('projectImageUrl').value || "https://www2.camara.leg.br/atividade-legislativa/comissoes/comissoes-permanentes/cindra/imagens/sem.jpg.gif/image_preview";  // URL da imagem (ou uma imagem padrão se não informada)
 
       // Chama a função de backend para criar o projeto
       const project = await createProjectInBackend(title, description, imageUrl);  // Agora passando a URL da imagem
