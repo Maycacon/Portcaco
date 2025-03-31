@@ -27,6 +27,6 @@ O front-end do projeto pode ser acessado pelos seguintes domínios no Vercel:
 ### Componente Back-End
 *BACK4APP*
 
-----
+---
 
 
