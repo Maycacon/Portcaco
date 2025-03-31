@@ -1,8 +1,6 @@
-// backend.js - Funções de backend
-
 // Inicializando o Parse
-Parse.initialize("XbWp0BHJ1nLCEjQBk2AaKzJzC30y3zof1e7JqzB3", "KuBJUnq37PavJZ4L7KiBJFAe3sO88IckmdMQEz0m");  // Substitua com suas credenciais
-Parse.serverURL = 'https://parseapi.back4app.com/';  // URL da sua API no Back4App
+Parse.initialize("XbWp0BHJ1nLCEjQBk2AaKzJzC30y3zof1e7JqzB3", "KuBJUnq37PavJZ4L7KiBJFAe3sO88IckmdMQEz0m");  
+Parse.serverURL = 'https://parseapi.back4app.com/';  
 
 // Função para criar projeto
 async function createProjectInBackend(title, description, imageUrl) {
@@ -11,7 +9,7 @@ async function createProjectInBackend(title, description, imageUrl) {
   
   project.set("title", title);
   project.set("description", description);
-  project.set("imageUrl", imageUrl);  // Adicionando a URL da imagem
+  project.set("imageUrl", imageUrl); 
   
   try {
     await project.save();
